@@ -53,10 +53,10 @@
         <title>Generale</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="./table_style.css" type="text/css">
+        <link rel="stylesheet" href="./Style/table_style.css" type="text/css">
         <!--<link rel="stylesheet" href="./sticky_navbar.css" type="text/css">-->
-        <link rel="stylesheet" href="./floating_button.css" type="text/css">
-        <link rel="stylesheet" href="./dropdown_style.css" type="text/css">
+        <link rel="stylesheet" href="./Style/floating_button.css" type="text/css">
+        <link rel="stylesheet" href="./Style/dropdown_style.css" type="text/css">
     </head>
 
     <body style="margin: 0px;">

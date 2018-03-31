@@ -79,8 +79,8 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Add new</title>
-    <link rel="stylesheet" href="./style.css" type="text/css">
-    <link rel="stylesheet" href="./inputs.css" type="text/css">
+    <link rel="stylesheet" href="./Style/style.css" type="text/css">
+    <link rel="stylesheet" href="./Style/inputs.css" type="text/css">
   </head>
 
   <body>
