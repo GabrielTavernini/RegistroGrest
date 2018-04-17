@@ -1,73 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-table, th, td {
-    border: 1px solid black;
-}
-</style>
-</head>
-<body>
-
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "Grest";
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "Grest";
+    $labs = array();
+    $dates = array();
+    $sports = array();
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-$sql = "SELECT * FROM Date";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    echo "<div>";
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo $row["Giorno"] . ":" . $row["Data"] . ";";
+    $sql = "SELECT * FROM Date";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            array_push($dates, $row['Data']);
+        }
     }
-    echo "</div>";
-} else {
-    echo "0 results";
-}
 
-$sql = "SELECT * FROM Laboratori";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    echo "<div>";
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo $row["ID"] . ":" . $row["Nome"] . ";";
+    $sql = "SELECT Nome FROM Laboratori";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            array_push($labs, $row['Nome']);
+        }
     }
-    echo "</div>";
-} else {
-    echo "0 results";
-}
 
-$sql = "SELECT * FROM Sport";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    echo "<div>";
-    //echo "<table><tr><th>ID</th><th>Sport</th></tr>";
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        //echo "<tr><td>" . $row["ID"]. "</td><td>" . $row["Nome"]. "</td></tr>";
-        echo $row["ID"] . ":" . $row["Nome"] . ";";
+    $sql = "SELECT Nome FROM Sport";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            array_push($sports, $row['Nome']);
+        }
     }
-    //echo "</table>";
-    echo "</div>";
-} else {
-    echo "0 results";
-}
-$conn->close();
-?> 
 
-</body>
-</html>
+    $arr = array("dates" => $dates, "labs" => $labs, "sports" => $sports);
+    $json_arr = json_encode($arr);
+
+    print $json_arr;
+?>

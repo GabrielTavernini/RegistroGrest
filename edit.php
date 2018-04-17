@@ -1,6 +1,6 @@
 <?php
-    $laboratori;
-    $sport;
+    $laboratori = array();
+    $sport = array();
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -39,21 +39,21 @@
     } else {
     }
 
-    $sql = "SELECT ID, Nome FROM Laboratori";
+    $sql = "SELECT Nome FROM Laboratori";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            $laboratori[$row['ID']] = $row['Nome'];
+            array_push($laboratori, $row['Nome']);
         }
     }
 
-    $sql = "SELECT ID, Nome FROM Sport";
+    $sql = "SELECT Nome FROM Sport";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            $sport[$row['ID']] = $row['Nome'];
+            array_push($sport, $row['Nome']);
         }
     }
     $conn->close();
@@ -145,7 +145,7 @@
             <input type="text" placeholder="Età" name="eta" value="<?php echo $editEta; ?>"/>
             <div class="select">
                 <select name="lab" >
-                    <option value=" " <?php if($editLab == '') { echo 'selected'; } ?>>Seleziona Laboratorio</option>
+                    <option value="99" <?php if($editLab == '99') { echo 'selected'; } ?>>Seleziona Laboratorio</option>
                     <?php
                         for ($x = 0; $x < count($laboratori); $x++) {
                             if($editLab == $x) { 
@@ -162,7 +162,7 @@
             <label class="control control--checkbox">Presenza 1<input type="checkbox" <?php if($editPre1 == 1) {echo 'checked';} ?> value="1" name="pre1"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport1">
-                    <option value=" " <?php if($editSport1== '') { echo 'selected'; } ?>>Seleziona Sport 1</option> //to do
+                    <option value="99" <?php if($editSport1== '99') { echo 'selected'; } ?>>Seleziona Sport 1</option> //to do
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             if($editSport1 == $x) { 
@@ -179,7 +179,7 @@
             <label class="control control--checkbox">Presenza 2<input type="checkbox" <?php if($editPre2 == 1) {echo 'checked';} ?> value="1" name="pre2"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport2">
-                    <option value=" " <?php if($editSport2== '') { echo 'selected'; } ?>>Seleziona Sport 2</option> //to do
+                    <option value="99" <?php if($editSport2== '99') { echo 'selected'; } ?>>Seleziona Sport 2</option> //to do
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             if($editSport2 == $x) { 
@@ -196,7 +196,7 @@
             <label class="control control--checkbox">Presenza 3<input type="checkbox" <?php if($editPre3 == 1) {echo 'checked';} ?> value="1" name="pre3"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport3">
-                    <option value=" " <?php if($editSport3== '') { echo 'selected'; } ?>>Seleziona Sport 3</option> //to do
+                    <option value="99" <?php if($editSport3== '99') { echo 'selected'; } ?>>Seleziona Sport 3</option> //to do
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             if($editSport3 == $x) { 
@@ -213,7 +213,7 @@
             <label class="control control--checkbox">Presenza 4<input type="checkbox" <?php if($editPre4 == 1) {echo 'checked';} ?> value="1" name="pre4"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport4">
-                    <option value=" " <?php if($editSport4== '') { echo 'selected'; } ?>>Seleziona Sport 4</option> //to do
+                    <option value="99" <?php if($editSport4== '99') { echo 'selected'; } ?>>Seleziona Sport 4</option> //to do
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             if($editSport4 == $x) { 

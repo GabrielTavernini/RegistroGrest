@@ -1,6 +1,6 @@
 <?php
-    $laboratori;
-    $sport;
+    $laboratori = array();
+    $sport = array();
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -13,21 +13,21 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "SELECT ID, Nome FROM Laboratori";
+    $sql = "SELECT Nome FROM Laboratori";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            $laboratori[$row['ID']] = $row['Nome'];
+            array_push($laboratori, $row['Nome']);
         }
     }
 
-    $sql = "SELECT ID, Nome FROM Sport";
+    $sql = "SELECT Nome FROM Sport";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            $sport[$row['ID']] = $row['Nome'];
+            array_push($sport, $row['Nome']);
         }
     }
     $conn->close();
@@ -91,7 +91,7 @@
             <input type="number" placeholder="Età" name="eta">
             <div class="select">
                 <select name="lab">
-                    <option value="">Seleziona Laboratorio</option>
+                    <option value="99">Seleziona Laboratorio</option>
                     <?php
                         for ($x = 0; $x < count($laboratori); $x++) {
                             echo "<option value='$x'>$laboratori[$x]</option>";
@@ -103,7 +103,7 @@
             <label class="control control--checkbox">Presenza 1<input type="checkbox" value="1" name="pre1"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport1">
-                    <option value="">Seleziona Sport 1</option>
+                    <option value="99">Seleziona Sport 1</option>
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             echo "<option value='$x'>$sport[$x]</option>";
@@ -115,7 +115,7 @@
             <label class="control control--checkbox">Presenza 2<input type="checkbox" value="1" name="pre2"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport2">
-                    <option value="">Seleziona Sport 2</option>
+                    <option value="99">Seleziona Sport 2</option>
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             echo "<option value='$x'>$sport[$x]</option>";
@@ -127,7 +127,7 @@
             <label class="control control--checkbox">Presenza 3<input type="checkbox" value="1" name="pre3"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport3">
-                    <option value="">Seleziona Sport 3</option>
+                    <option value="99">Seleziona Sport 3</option>
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             echo "<option value='$x'>$sport[$x]</option>";
@@ -139,7 +139,7 @@
             <label class="control control--checkbox">Presenza 4<input type="checkbox" value="1" name="pre4"/> <div class="control__indicator"></div> </label>
             <div class="select">
                 <select name="sport4">
-                    <option value="">Seleziona Sport 4</option>
+                    <option value="99">Seleziona Sport 4</option>
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
                             echo "<option value='$x'>$sport[$x]</option>";
