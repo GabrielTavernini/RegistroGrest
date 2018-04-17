@@ -185,7 +185,7 @@
                                 die("Connection failed: " . $conn->connect_error);
                             } 
 
-                            $sql = "SELECT Nome, Eta, LabID, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4 FROM Generale";
+                            $sql = "SELECT Nome, Eta, LabID, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4 FROM Generale WHERE Sport1 = '" . $_GET['sport'] . "'";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0) {

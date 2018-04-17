@@ -1,6 +1,8 @@
 <?php
     session_start();
-    $laboratoi;
+    $laboratori = array();
+    $sport = array();
+    $presenza;
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -13,20 +15,37 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "SELECT ID, Nome FROM Laboratori";
+    $sql = "SELECT Nome FROM Laboratori";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            $laboratoi[$row['ID']] = $row['Nome'];
+            array_push($laboratori, $row['Nome']);
+        }
+    }
+
+    $sql = "SELECT Nome FROM Sport";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            array_push($sport, $row['Nome']);
+        }
+    }
+
+    $sql = "SELECT ID, Nome FROM Presenza";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            $presenza[$row['ID']] = $row['Nome'];
         }
     }
     $conn->close();
+    
 
-
-
+    
     $t=time();
-
     if (isset($_SESSION['logged']) && ($t - $_SESSION['logged'] > 900)) {
         header('location:./logout.php');
     }
@@ -40,11 +59,6 @@
     if(isset($_GET['day'])) {
         $day = $_GET['day'];
     }
-
-    $lab = "";
-    if(isset($_GET['lab'])) {
-        $lab = $_GET['lab'];
-    }
 ?>
 
 <!DOCTYPE html>
@@ -52,16 +66,25 @@
     <head>
         <title>Generale</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="refresh" content="15" > 
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="./Style/table_style.css" type="text/css">
         <!--<link rel="stylesheet" href="./sticky_navbar.css" type="text/css">-->
         <link rel="stylesheet" href="./Style/floating_button.css" type="text/css">
         <link rel="stylesheet" href="./Style/dropdown_style.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>         
+            .invisible {
+                display: none;
+            }
+        </style>
     </head>
 
     <body style="margin: 0px;">
         <ul>
-            <li class="dropdown">
+            <li class="dropdown active">
                 <a href="javascript:void(0)" class="dropbtn">Generale</a>
                 <div class="dropdown-content">
                 <a href="./general.php?day=0">Complessivo</a>    
@@ -70,29 +93,31 @@
                 <a href="./general.php?day=3">Giorno 3</a>
                 <a href="./general.php?day=4">Giorno 4</a>
                 </div>
+                
             </li>
 
-            <li class="dropdown<?php if($lab == 'Traforo') { echo ' active"'; } ?>">
-                <a href="javascript:void(0)" class="dropbtn">Traforo</a>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Sport</a>
                 <div class="dropdown-content">
-                <a href="./laboratorio.php?day=0&lab=Traforo">Complessivo</a>    
-                <a href="./laboratorio.php?day=1&lab=Traforo">Giorno 1</a>
-                <a href="./laboratorio.php?day=2&lab=Traforo">Giorno 2</a>
-                <a href="./laboratorio.php?day=3&lab=Traforo">Giorno 3</a>
-                <a href="./laboratorio.php?day=4&lab=Traforo">Giorno 4</a>
+                    <?php
+                        for ($x = 0; $x < count($sport); $x++) {
+                            echo "<a href='./sport.php?day=" . $day . "&sport=" . $x . "'>". $sport[$x] ."</a>";
+                        } 
+                    ?>    
                 </div>
             </li>
 
-            <li class="dropdown<?php if($lab == 'Cucina') { echo ' active"'; } ?>">
-                <a href="javascript:void(0)" class="dropbtn">Cucina</a>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Laboratori</a>
                 <div class="dropdown-content">
-                <a href="./laboratorio.php?day=0&lab=Cucina">Complessivo</a>    
-                <a href="./laboratorio.php?day=1&lab=Cucina">Giorno 1</a>
-                <a href="./laboratorio.php?day=2&lab=Cucina">Giorno 2</a>
-                <a href="./laboratorio.php?day=3&lab=Cucina">Giorno 3</a>
-                <a href="./laboratorio.php?day=4&lab=Cucina">Giorno 4</a>
+                    <?php
+                        for ($x = 0; $x < count($laboratori); $x++) {
+                            echo "<a href='./laboratorio.php?day=" . $day . "&labID=" . $x . "'>". $laboratori[$x] ."</a>";
+                        } 
+                    ?>    
                 </div>
             </li>
+
             <li class="logout"><a href="./logout.php">Esci</a></li>
         </ul>
         
@@ -128,14 +153,15 @@
                             <?php 
                                 if($day == 0)
                                 {
-                                    echo "<th class='text-left'>Presente1</th>
+                                    echo "<th class='text-left'>P1</th>
                                         <th class='text-left'>Sport1</th>
-                                        <th class='text-left'>Presente2</th>
+                                        <th class='text-left'>P2</th>
                                         <th class='text-left'>Sport2</th>
-                                        <th class='text-left'>Presente3</th>
+                                        <th class='text-left'>P3</th>
                                         <th class='text-left'>Sport3</th>
-                                        <th class='text-left'>Presente4</th>
-                                        <th class='text-left'>Sport4</th>";
+                                        <th class='text-left'>P4</th>
+                                        <th class='text-left'>Sport4</th>
+                                        <th class='invisible'>LabID</th>";
                                 }else{
                                     echo "<th class='text-left'>Presente</th>
                                         <th class='text-left'>Sport</th>";
@@ -159,7 +185,7 @@
                                 die("Connection failed: " . $conn->connect_error);
                             } 
 
-                            $sql = "SELECT Nome, Eta, Laboratorio, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4 FROM Generale WHERE Laboratorio = '$lab'";
+                            $sql = "SELECT Nome, Eta, LabID, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4 FROM Generale WHERE labID = '" . $_GET['labID'] . "'";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0) {
@@ -168,52 +194,112 @@
                                     if($day == 0) {
                                         echo "<tr class='clickable'><td class='text-left'>" 
                                             . $row["Nome"]. "</td><td>" 
-                                            . $row["Eta"]. " </td><td>" 
-                                            . $row["Laboratorio"]. " </td><td>" 
-                                            . $row["Presenza1"]. " </td><td>" 
-                                            . $row["Sport1"]. " </td><td>"
-                                            . $row["Presenza2"]. " </td><td>" 
-                                            . $row["Sport2"]. " </td><td>"
-                                            . $row["Presenza3"]. " </td><td>" 
-                                            . $row["Sport3"]. " </td><td>"
-                                            . $row["Presenza4"]. " </td><td>" 
-                                            . $row["Sport4"]. " </td></tr>"; 
+                                            . $row["Eta"]. " </td><td value=". $row["LabID"]. ">";
+
+                                            //laboratorio
+                                            if( $row["LabID"] != 99 ) { echo $laboratori[$row["LabID"]]; }
+                                            else{ echo "N/A"; }
+
+                                            //presenza 1
+                                            echo " </td><td value=". $row["Presenza1"]. ">" 
+                                            . $presenza[$row["Presenza1"]]. " </td><td value=". $row["Sport1"]. ">";
+
+                                            //sport 1
+                                            if( $row["Sport1"] != 99 ) { echo $sport[$row["Sport1"]]; }
+                                            else{ echo "N/A"; }
+
+                                            //presenza 2
+                                            echo " </td><td value=". $row["Presenza2"]. ">" 
+                                            . $presenza[$row["Presenza2"]]. " </td><td value=". $row["Sport2"]. ">";
+                                            
+                                            //sport 2
+                                            if( $row["Sport2"] != 99 ) { echo $sport[$row["Sport2"]]; }
+                                            else{ echo "N/A"; }
+                                            
+                                            //presenza 3
+                                            echo " </td><td value=". $row["Presenza3"]. ">" 
+                                            . $presenza[$row["Presenza3"]]. " </td><td value=". $row["Sport3"]. ">";
+                                            
+                                            //sport 3
+                                            if( $row["Sport3"] != 99 ) { echo $sport[$row["Sport3"]]; }
+                                            else{ echo "N/A"; }
+                                            
+                                            //presenza 4
+                                            echo " </td><td value=". $row["Presenza4"]. ">" 
+                                            . $presenza[$row["Presenza4"]]. " </td><td value=". $row["Sport4"]. ">"; 
+                                            
+                                            //sport 4
+                                            if( $row["Sport4"] != 99 ) { echo $sport[$row["Sport4"]]; }
+                                            else{ echo "N/A"; }
+                                            echo " </td></tr>" ; 
                                     }
                                     
                                     if($day == 1){
                                         echo "<tr class='clickable'><td class='text-left'>" 
                                             . $row["Nome"]. "</td><td>" 
-                                            . $row["Eta"]. " </td><td>" 
-                                            . $row["Laboratorio"]. " </td><td>" 
-                                            . $row["Presenza1"]. " </td><td>"
-                                            . $row["Sport1"]. " </td></tr>"; 
+                                            . $row["Eta"]. " </td><td value=". $row["LabID"]. ">";
+                                            if( $row["LabID"] != 99 ) { echo $laboratori[$row["LabID"]]; }
+                                            else{ echo "N/A"; }
+
+                                            //presenza 1
+                                            echo " </td><td value=". $row["Presenza1"]. ">" 
+                                            . $presenza[$row["Presenza1"]]. " </td><td value=". $row["Sport1"]. ">";
+
+                                            //sport 1
+                                            if( $row["Sport1"] != 99 ) { echo $sport[$row["Sport1"]]; }
+                                            else{ echo "N/A"; }
+                                            echo " </td></tr>";
                                     }
 
                                     if($day == 2){
                                         echo "<tr class='clickable'><td class='text-left'>" 
                                             . $row["Nome"]. "</td><td>" 
-                                            . $row["Eta"]. " </td><td>" 
-                                            . $row["Laboratorio"]. " </td><td>" 
-                                            . $row["Presenza2"]. " </td><td>"
-                                            . $row["Sport2"]. " </td></tr>"; 
+                                            . $row["Eta"]. " </td><td value=". $row["LabID"]. ">";
+                                            if( $row["LabID"] != 99 ) { echo $laboratori[$row["LabID"]]; }
+                                            else{ echo "N/A"; }
+
+                                            //presenza 2
+                                            echo " </td><td value=". $row["Presenza2"]. ">" 
+                                            . $presenza[$row["Presenza2"]]. " </td><td value=". $row["Sport2"]. ">";
+                                            
+                                            //sport 2
+                                            if( $row["Sport2"] != 99 ) { echo $sport[$row["Sport2"]]; }
+                                            else{ echo "N/A"; }
+                                            echo " </td></tr>"; 
                                     }
 
                                     if($day == 3){
                                         echo "<tr class='clickable'><td class='text-left'>" 
                                             . $row["Nome"]. "</td><td>" 
-                                            . $row["Eta"]. " </td><td>" 
-                                            . $row["Laboratorio"]. " </td><td>" 
-                                            . $row["Presenza3"]. " </td><td>"
-                                            . $row["Sport3"]. " </td></tr>"; 
+                                            . $row["Eta"]. " </td><td value=". $row["LabID"]. ">";
+                                            if( $row["LabID"] != 99 ) { echo $laboratori[$row["LabID"]]; }
+                                            else{ echo "N/A"; }
+
+                                            //presenza 3
+                                            echo " </td><td value=". $row["Presenza3"]. ">" 
+                                            . $presenza[$row["Presenza3"]]. " </td><td value=". $row["Sport3"]. ">";
+                                            
+                                            //sport 3
+                                            if( $row["Sport3"] != 99 ) { echo $sport[$row["Sport3"]]; }
+                                            else{ echo "N/A"; } 
+                                            echo " </td></tr>"; 
                                     }
 
                                     if($day == 4){
                                         echo "<tr class='clickable'><td class='text-left'>" 
                                             . $row["Nome"]. "</td><td>" 
-                                            . $row["Eta"]. " </td><td>" 
-                                            . $row["Laboratorio"]. " </td><td>" 
-                                            . $row["Presenza4"]. " </td><td>"
-                                            . $row["Sport4"]. " </td></tr>"; 
+                                            . $row["Eta"]. " </td><td value=". $row["LabID"]. ">";
+                                            if( $row["LabID"] != 99 ) { echo $laboratori[$row["LabID"]]; }
+                                            else{ echo "N/A"; }
+
+                                            //presenza 4
+                                            echo " </td><td value=". $row["Presenza4"]. ">" 
+                                            . $presenza[$row["Presenza4"]]. " </td><td value=". $row["Sport4"]. ">"; 
+                                            
+                                            //sport 4
+                                            if( $row["Sport4"] != 99 ) { echo $sport[$row["Sport4"]]; }
+                                            else{ echo "N/A"; }
+                                            echo " </td></tr>" ; 
                                     }
                                 }
                             } else {
@@ -230,7 +316,6 @@
         <a href="./new.php" class="float">
             <i class="fa fa-plus my-float"></i>
         </a>
-
 
         <script>
             window.onscroll = function() {myFunction()};
