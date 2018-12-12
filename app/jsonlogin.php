@@ -15,12 +15,16 @@
             array_push($pass, $row['Pass']);
         }
     }
-
+	
     $lab = $_GET["username"];
 
     if($lab == 99 && $_GET["password"] == "admin")
-        $validUser = true;
-    else
+		$validUser = true;
+	else if($lab == "98" && $_GET["password"] == "atletici")
+		$validUser = true;
+	else if($lab == "nolab")
+		$validUser = true;
+	else
         $validUser = $_GET["password"] == $pass[$_GET["username"]];
 
     if($validUser)
@@ -29,19 +33,18 @@
         $eta = array();
         $labs = array();
         $pre1 = array();
-        $spo1 = array();
         $pre2 = array();
-        $spo2 = array();
         $pre3 = array();
-        $spo3 = array();
         $pre4 = array();
-        $spo4 = array();
+        $spo = array();
 
         $conn = new mysqli($servername, $username, $password, $dbname);
-        if($lab != 99)
-            $sql = "SELECT Nome, Eta, LabID, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4 FROM Generale WHERE LabID = '$lab'";
+		if($lab != 99 && $lab != "nolab" && $lab != 98)
+			$sql = "SELECT Nome, Eta, LabID, Presenza1, Presenza2, Presenza3, Presenza4, Sport FROM Generale WHERE LabID = '$lab'";
+		else if($lab == "nolab")
+			$sql = "SELECT Nome, Eta, LabID, Presenza1, Presenza2, Presenza3, Presenza4, Sport FROM Generale WHERE LabID = 99";
         else
-            $sql = "SELECT Nome, Eta, LabID, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4 FROM Generale";
+            $sql = "SELECT Nome, Eta, LabID, Presenza1, Presenza2, Presenza3, Presenza4, Sport FROM Generale";
 
         $result = $conn->query($sql);
 
@@ -50,16 +53,13 @@
             $eta[] = $row["Eta"];
             $labs[] = $row["LabID"];
             $pre1[] = $row["Presenza1"];
-            $spo1[] = $row["Sport1"];
             $pre2[] = $row["Presenza2"];
-            $spo2[] = $row["Sport2"];
             $pre3[] = $row["Presenza3"];
-            $spo3[] = $row["Sport3"];
             $pre4[] = $row["Presenza4"];
-            $spo4[] = $row["Sport4"];
+			$spo[] = $row["Sport"];
         }
 
-        $arr = array("names" => $names, "eta" => $eta, "labs" => $labs, "pre1" => $pre1, "spo1" => $spo1, "pre2" => $pre2, "spo2" => $spo2, "pre3" => $pre3, "spo3" => $spo3, "pre4" => $pre4, "spo4" => $spo4);
+        $arr = array("names" => $names, "eta" => $eta, "labs" => $labs, "pre1" => $pre1, "pre2" => $pre2, "pre3" => $pre3, "pre4" => $pre4, "spo" => $spo);
         $json_arr = json_encode($arr);
 
         print $json_arr;

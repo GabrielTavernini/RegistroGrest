@@ -15,11 +15,8 @@
     $editPre1 = "";
     $editPre2 = "";
     $editPre3 = "";
-    $editPre4 = "";
-    $editSport1 = "";
-    $editSport2 = "";
-    $editSport3 = "";
-    $editSport4 = "";
+	$editPre4 = "";
+    $editSport = "";
 
     $sql = "SELECT * FROM Generale WHERE Nome='$editName' && Eta='$editEta'";
     $result = $conn->query($sql);
@@ -28,13 +25,10 @@
         while($row = $result->fetch_assoc()) {
             $editLab = $row["LabID"];
             $editPre1 = $row["Presenza1"];
-            $editSport1 = $row["Sport1"];
             $editPre2 = $row["Presenza2"];
-            $editSport2 = $row["Sport2"];
             $editPre3 = $row["Presenza3"];
-            $editSport3 = $row["Sport3"];
             $editPre4 = $row["Presenza4"];
-            $editSport4 = $row["Sport4"];;
+            $editSport = $row["Sport"];;
         }
     } else {
     }
@@ -87,15 +81,12 @@
             $pre4 = $_POST["pre4"];
         }else{ $pre4 = 0;}
         
-        $sport1 = $_POST["sport1"];
-        $sport2 = $_POST["sport2"];
-        $sport3 = $_POST["sport3"];
-        $sport4 = $_POST["sport4"];
+        $sport = $_POST["sport"];
         $lab = $laboratori[$_POST["lab"]];
         $LabID = $_POST["lab"];
 
-        $sql = "UPDATE Generale SET Nome = '$nome', Eta = '$eta', Presenza1 ='$pre1' , Sport1 = '$sport1', Presenza2 = '$pre2',
-        Sport2 = '$sport2', Presenza3 = '$pre3', Sport3 = '$sport3', Presenza4 = '$pre4', Sport4 = '$sport4', LabID = '$LabID' 
+        $sql = "UPDATE Generale SET Nome = '$nome', Eta = '$eta', Presenza1 ='$pre1', Presenza2 = '$pre2', 
+		Presenza3 = '$pre3', Presenza4 = '$pre4', Sport = '$sport', LabID = '$LabID' 
         WHERE Nome='$editName' && Eta='$editEta'";
 
         if ($conn->query($sql) === TRUE) {
@@ -159,64 +150,12 @@
                 </select>
                 <div class="select__arrow"></div>
             </div>  
-            <label class="control control--checkbox">Presenza 1<input type="checkbox" <?php if($editPre1 == 1) {echo 'checked';} ?> value="1" name="pre1"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport1">
-                    <option value="99" <?php if($editSport1== '99') { echo 'selected'; } ?>>Seleziona Sport 1</option> //to do
+			<div class="select">
+                <select name="sport">
+                    <option value="99" <?php if($editSport== '99') { echo 'selected'; } ?>>Seleziona Sport</option> 
                     <?php
                         for ($x = 0; $x < count($sport); $x++) {
-                            if($editSport1 == $x) { 
-                                echo "<option value='$x' selected>$sport[$x]</option>";
-                            }
-                            else{
-                                echo "<option value='$x'>$sport[$x]</option>";
-                            }
-                        } 
-                    ?>
-                    </select>
-                <div class="select__arrow"></div>
-            </div>          
-            <label class="control control--checkbox">Presenza 2<input type="checkbox" <?php if($editPre2 == 1) {echo 'checked';} ?> value="1" name="pre2"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport2">
-                    <option value="99" <?php if($editSport2== '99') { echo 'selected'; } ?>>Seleziona Sport 2</option> //to do
-                    <?php
-                        for ($x = 0; $x < count($sport); $x++) {
-                            if($editSport2 == $x) { 
-                                echo "<option value='$x' selected>$sport[$x]</option>";
-                            }
-                            else{
-                                echo "<option value='$x'>$sport[$x]</option>";
-                            }
-                        } 
-                    ?>
-                </select>
-                <div class="select__arrow"></div>
-            </div>   
-            <label class="control control--checkbox">Presenza 3<input type="checkbox" <?php if($editPre3 == 1) {echo 'checked';} ?> value="1" name="pre3"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport3">
-                    <option value="99" <?php if($editSport3== '99') { echo 'selected'; } ?>>Seleziona Sport 3</option> //to do
-                    <?php
-                        for ($x = 0; $x < count($sport); $x++) {
-                            if($editSport3 == $x) { 
-                                echo "<option value='$x' selected>$sport[$x]</option>";
-                            }
-                            else{
-                                echo "<option value='$x'>$sport[$x]</option>";
-                            }
-                        } 
-                    ?>
-                </select>
-                <div class="select__arrow"></div>
-            </div>          
-            <label class="control control--checkbox">Presenza 4<input type="checkbox" <?php if($editPre4 == 1) {echo 'checked';} ?> value="1" name="pre4"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport4">
-                    <option value="99" <?php if($editSport4== '99') { echo 'selected'; } ?>>Seleziona Sport 4</option> //to do
-                    <?php
-                        for ($x = 0; $x < count($sport); $x++) {
-                            if($editSport4 == $x) { 
+                            if($editSport == $x) { 
                                 echo "<option value='$x' selected>$sport[$x]</option>";
                             }
                             else{
@@ -227,6 +166,11 @@
                 </select>
                 <div class="select__arrow"></div>
             </div>  
+            <label class="control control--checkbox">Presenza 1<input type="checkbox" <?php if($editPre1 == 1) {echo 'checked';} ?> value="1" name="pre1"/> <div class="control__indicator"></div> </label>     
+            <label class="control control--checkbox">Presenza 2<input type="checkbox" <?php if($editPre2 == 1) {echo 'checked';} ?> value="1" name="pre2"/> <div class="control__indicator"></div> </label>
+            <label class="control control--checkbox">Presenza 3<input type="checkbox" <?php if($editPre3 == 1) {echo 'checked';} ?> value="1" name="pre3"/> <div class="control__indicator"></div> </label>       
+            <label class="control control--checkbox">Presenza 4<input type="checkbox" <?php if($editPre4 == 1) {echo 'checked';} ?> value="1" name="pre4"/> <div class="control__indicator"></div> </label>
+            
             <div>
                 <button type="submit" name="update">SALVA</button>
                 <button type="submit" name="delete" style="background: #f72c2c;">ELIMINA</button>

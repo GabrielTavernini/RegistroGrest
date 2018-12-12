@@ -1,7 +1,8 @@
 <?php
     session_start();
     $laboratori = array();
-    $sport = array();
+	$sport = array();
+	$date = array();
     $presenza;
     $servername = "localhost";
     $username = "root";
@@ -14,6 +15,15 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
+	
+	$sql = "SELECT * FROM Date";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            array_push($date, $row['Data']);
+        }
+	}
 
     $sql = "SELECT Nome FROM Laboratori";
     $result = $conn->query($sql);
@@ -138,9 +148,9 @@
             <div class="table-title">
                 <?php 
                     if($day == 0)
-                        echo "<h3>Complessivo</h3>";
+                        echo "<h3>Complessivo - ".$sport[$_GET['sport']]."</h3>";
                     else
-                        echo "<h3>Giorno ".$day."</h3>";
+                        echo "<h3>Giorno ".$day." (".$date[$day - 1].") - ".$sport[$_GET['sport']]."</h3>";
                 ?>
             </div>
             <div class="scrolling-content">
@@ -153,15 +163,11 @@
                             <?php 
                                 if($day == 0)
                                 {
-                                    echo "<th class='text-left'>P1</th>
-                                        <th class='text-left'>Sport1</th>
-                                        <th class='text-left'>P2</th>
-                                        <th class='text-left'>Sport2</th>
-                                        <th class='text-left'>P3</th>
-                                        <th class='text-left'>Sport3</th>
-                                        <th class='text-left'>P4</th>
-                                        <th class='text-left'>Sport4</th>
-                                        <th class='invisible'>LabID</th>";
+                                    echo "<th class='text-left'>".$date[0]."</th>
+                                        <th class='text-left'>".$date[1]."</th>
+                                        <th class='text-left'>".$date[2]."</th>
+                                        <th class='text-left'>".$date[3]."</th>
+                                        <th class='text-left'>Sport</th>";
                                 }else{
                                     echo "<th class='text-left'>Presente</th>
                                         <th class='text-left'>Sport</th>";
@@ -185,7 +191,7 @@
                                 die("Connection failed: " . $conn->connect_error);
                             } 
 
-                            $sql = "SELECT Nome, Eta, LabID, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4 FROM Generale WHERE Sport1 = '" . $_GET['sport'] . "'";
+                            $sql = "SELECT Nome, Eta, LabID, Presenza1, Presenza2, Presenza3, Presenza4, Sport FROM Generale WHERE Sport = '" . $_GET['sport'] . "'";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0) {
@@ -202,36 +208,19 @@
 
                                             //presenza 1
                                             echo " </td><td value=". $row["Presenza1"]. ">" 
-                                            . $presenza[$row["Presenza1"]]. " </td><td value=". $row["Sport1"]. ">";
-
-                                            //sport 1
-                                            if( $row["Sport1"] != 99 ) { echo $sport[$row["Sport1"]]; }
-                                            else{ echo "N/A"; }
+                                            . $presenza[$row["Presenza1"]]. " </td>";
 
                                             //presenza 2
                                             echo " </td><td value=". $row["Presenza2"]. ">" 
-                                            . $presenza[$row["Presenza2"]]. " </td><td value=". $row["Sport2"]. ">";
-                                            
-                                            //sport 2
-                                            if( $row["Sport2"] != 99 ) { echo $sport[$row["Sport2"]]; }
-                                            else{ echo "N/A"; }
+                                            . $presenza[$row["Presenza2"]]. " </td>";
                                             
                                             //presenza 3
                                             echo " </td><td value=". $row["Presenza3"]. ">" 
-                                            . $presenza[$row["Presenza3"]]. " </td><td value=". $row["Sport3"]. ">";
-                                            
-                                            //sport 3
-                                            if( $row["Sport3"] != 99 ) { echo $sport[$row["Sport3"]]; }
-                                            else{ echo "N/A"; }
+                                            . $presenza[$row["Presenza3"]]. " </td>";
                                             
                                             //presenza 4
                                             echo " </td><td value=". $row["Presenza4"]. ">" 
-                                            . $presenza[$row["Presenza4"]]. " </td><td value=". $row["Sport4"]. ">"; 
-                                            
-                                            //sport 4
-                                            if( $row["Sport4"] != 99 ) { echo $sport[$row["Sport4"]]; }
-                                            else{ echo "N/A"; }
-                                            echo " </td></tr>" ; 
+                                            . $presenza[$row["Presenza4"]]. " </td>"; 
                                     }
                                     
                                     if($day == 1){
@@ -243,12 +232,7 @@
 
                                             //presenza 1
                                             echo " </td><td value=". $row["Presenza1"]. ">" 
-                                            . $presenza[$row["Presenza1"]]. " </td><td value=". $row["Sport1"]. ">";
-
-                                            //sport 1
-                                            if( $row["Sport1"] != 99 ) { echo $sport[$row["Sport1"]]; }
-                                            else{ echo "N/A"; }
-                                            echo " </td></tr>";
+											. $presenza[$row["Presenza1"]]. " </td>";
                                     }
 
                                     if($day == 2){
@@ -260,12 +244,7 @@
 
                                             //presenza 2
                                             echo " </td><td value=". $row["Presenza2"]. ">" 
-                                            . $presenza[$row["Presenza2"]]. " </td><td value=". $row["Sport2"]. ">";
-                                            
-                                            //sport 2
-                                            if( $row["Sport2"] != 99 ) { echo $sport[$row["Sport2"]]; }
-                                            else{ echo "N/A"; }
-                                            echo " </td></tr>"; 
+                                            . $presenza[$row["Presenza2"]]. " </td>";
                                     }
 
                                     if($day == 3){
@@ -277,12 +256,7 @@
 
                                             //presenza 3
                                             echo " </td><td value=". $row["Presenza3"]. ">" 
-                                            . $presenza[$row["Presenza3"]]. " </td><td value=". $row["Sport3"]. ">";
-                                            
-                                            //sport 3
-                                            if( $row["Sport3"] != 99 ) { echo $sport[$row["Sport3"]]; }
-                                            else{ echo "N/A"; } 
-                                            echo " </td></tr>"; 
+                                            . $presenza[$row["Presenza3"]]. " </td>";
                                     }
 
                                     if($day == 4){
@@ -294,14 +268,17 @@
 
                                             //presenza 4
                                             echo " </td><td value=". $row["Presenza4"]. ">" 
-                                            . $presenza[$row["Presenza4"]]. " </td><td value=". $row["Sport4"]. ">"; 
-                                            
-                                            //sport 4
-                                            if( $row["Sport4"] != 99 ) { echo $sport[$row["Sport4"]]; }
-                                            else{ echo "N/A"; }
-                                            echo " </td></tr>" ; 
-                                    }
-                                }
+                                            . $presenza[$row["Presenza4"]]. " </td>"; 
+									}
+								
+									//sport
+									echo "<td value=". $_GET['sport']. ">";
+									if( $row["Sport"] != 99 ) { echo $sport[$_GET['sport']]; }
+									else{ echo "N/A"; }
+									echo " </td></tr>" ;
+
+								}
+
                             } else {
                                 echo "0 results";
                             }

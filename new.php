@@ -52,14 +52,11 @@
     $pre2 = $_POST["pre2"];
     $pre3 = $_POST["pre3"];
     $pre4 = $_POST["pre4"];
-    $sport1 = $_POST["sport1"];
-    $sport2 = $_POST["sport2"];
-    $sport3 = $_POST["sport3"];
-    $sport4 = $_POST["sport4"];
+    $sport4 = $_POST["sport"];
     $LabID = $_POST["lab"];
 
-    $sql = "INSERT INTO Generale (Nome, Eta, LabID, Presenza1, Sport1, Presenza2, Sport2, Presenza3, Sport3, Presenza4, Sport4)
-    VALUES ('$nome', '$eta', '$LabID', '$pre1', '$sport1', '$pre2', '$sport2', '$pre3', '$sport3', '$pre4', '$sport4')";
+    $sql = "INSERT INTO Generale (Nome, Eta, LabID, Presenza1, Presenza2, Presenza3, Presenza4, Sport)
+    VALUES ('$nome', '$eta', '$LabID', '$pre1', '$pre2', '$pre3', '$pre4', '$sport')";
 
     if ($conn->query($sql) === TRUE) {
         header('LOCATION:./general.php'); die();
@@ -100,54 +97,22 @@
                 </select>
                 <div class="select__arrow"></div>
             </div>  
+			<div class="select">
+                <select name="sport">
+                    <option value="99">Seleziona Sport</option>
+                    <?php
+                        for ($x = 0; $x < count($sport); $x++) {
+                            echo "<option value='$x'>$sport[$x]</option>";
+                        } 
+                    ?>
+                </select>
+                <div class="select__arrow"></div>
+            </div>   
             <label class="control control--checkbox">Presenza 1<input type="checkbox" value="1" name="pre1"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport1">
-                    <option value="99">Seleziona Sport 1</option>
-                    <?php
-                        for ($x = 0; $x < count($sport); $x++) {
-                            echo "<option value='$x'>$sport[$x]</option>";
-                        } 
-                    ?>
-                </select>
-                <div class="select__arrow"></div>
-            </div>          
             <label class="control control--checkbox">Presenza 2<input type="checkbox" value="1" name="pre2"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport2">
-                    <option value="99">Seleziona Sport 2</option>
-                    <?php
-                        for ($x = 0; $x < count($sport); $x++) {
-                            echo "<option value='$x'>$sport[$x]</option>";
-                        } 
-                    ?>
-                </select>
-                <div class="select__arrow"></div>
-            </div>   
             <label class="control control--checkbox">Presenza 3<input type="checkbox" value="1" name="pre3"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport3">
-                    <option value="99">Seleziona Sport 3</option>
-                    <?php
-                        for ($x = 0; $x < count($sport); $x++) {
-                            echo "<option value='$x'>$sport[$x]</option>";
-                        } 
-                    ?>
-                </select>
-                <div class="select__arrow"></div>
-            </div>          
             <label class="control control--checkbox">Presenza 4<input type="checkbox" value="1" name="pre4"/> <div class="control__indicator"></div> </label>
-            <div class="select">
-                <select name="sport4">
-                    <option value="99">Seleziona Sport 4</option>
-                    <?php
-                        for ($x = 0; $x < count($sport); $x++) {
-                            echo "<option value='$x'>$sport[$x]</option>";
-                        } 
-                    ?>
-                </select>
-                <div class="select__arrow"></div>
-            </div>   
+            
             <button type="submit" name="add">AGGIUNGI</button>
         </form>
       </div>
